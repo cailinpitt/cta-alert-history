@@ -25,7 +25,12 @@ const METRA_SIGNAL_COLORS = {
   delay: '#eab308', // yellow-500 — running late
 };
 
+// `counts` may be undefined: buildMetraSignalsByLine only creates a key for
+// lines that actually had observations, so probing a quiet line yields
+// nothing. (buildSignalsByLine pre-seeds every train line, hence train rows
+// never hit this.)
 function lineTotal(counts, types = SIGNAL_TYPES) {
+  if (!counts) return 0;
   return types.reduce((sum, sig) => sum + (counts[sig] || 0), 0);
 }
 
